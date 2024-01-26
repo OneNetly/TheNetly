@@ -16,3 +16,5 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         server-dir: /thenetly.com/
         port: 21
+        security: loose
+        protocol: ftps
