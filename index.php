@@ -31,7 +31,7 @@ function fetchLatestVideos($api_key, $max_results = 10) {
 }
 
 // Display latest videos
-$api_key = 'your_youtube_api_key';
+$api_key = 'AIzaSyCLEd18z88RqKxn_0x_BdblkKP9F56wb0w';
 $videos = fetchLatestVideos($api_key);
 
 echo "<h1 class='text-3xl font-bold mb-4'>Latest YouTube Videos</h1>";
