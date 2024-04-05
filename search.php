@@ -19,16 +19,34 @@ $data = json_decode($response, true);
 
 // Store the search results in the database
 foreach ($data['items'] as $item) {
-    $title = $conn->real_escape_string($item['title']);
-    $url = $conn->real_escape_string($item['link']);
-    $description = $conn->real_escape_string($item['snippet']);
+    $title = isset($item['title']) ? $conn->real_escape_string($item['title']) : '';
+    $url = isset($item['link']) ? $conn->real_escape_string($item['link']) : '';
+    $description = isset($item['snippet']) ? $conn->real_escape_string($item['snippet']) : '';
 
-    $sql = "INSERT INTO search_results (title, url, description) VALUES ('$title', '$url', '$description')";
+    // Calculate the relevance score based on the title and description
+    $titleRelevance = substr_count(strtolower($title), strtolower($query));
+    $descriptionRelevance = substr_count(strtolower($description), strtolower($query));
+    $relevanceScore = $titleRelevance * 2 + $descriptionRelevance;
+
+    // Insert the search result into the database with the relevance score
+    $sql = "INSERT INTO search_results (title, url, description, relevance_score) VALUES ('$title', '$url', '$description', $relevanceScore)";
     $conn->query($sql);
 }
 
-$totalResults = $data['searchInformation']['totalResults'];
+// Retrieve the total count of search results
+$sql = "SELECT COUNT(*) AS total FROM search_results WHERE title LIKE '%$query%' OR description LIKE '%$query%'";
+$result = $conn->query($sql);
+$row = $result->fetch_assoc();
+$totalResults = $row['total'];
 $totalPages = ceil($totalResults / $resultsPerPage);
+
+// Retrieve the search results from the database ordered by relevance score
+$offset = ($page - 1) * $resultsPerPage;
+$sql = "SELECT * FROM search_results
+        WHERE title LIKE '%$query%' OR description LIKE '%$query%'
+        ORDER BY relevance_score DESC
+        LIMIT $offset, $resultsPerPage";
+$result = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
@@ -94,6 +112,11 @@ $totalPages = ceil($totalResults / $resultsPerPage);
             color: #545454;
             line-height: 1.6;
         }
+        .result-stats {
+            color: #70757a;
+            font-size: 14px;
+            margin-top: 8px;
+        }
         .pagination {
             margin-top: 32px;
             display: flex;
@@ -109,6 +132,9 @@ $totalPages = ceil($totalResults / $resultsPerPage);
             transition: background-color 0.3s ease;
         }
         .pagination a:hover {
+            background-color: #3367D6;
+        }
+        .pagination a.active {
             background-color: #3367D6;
         }
         @media screen and (max-width: 768px) {
@@ -145,20 +171,25 @@ $totalPages = ceil($totalResults / $resultsPerPage);
         </form>
         <div id="suggestionBox" class="bg-white border border-gray-300 rounded p-4 mb-8" style="display: none;"></div>
         <div id="searchResults">
-            <?php foreach ($data['items'] as $item): ?>
+            <?php while ($row = $result->fetch_assoc()): ?>
                 <div class="mb-8 bg-white p-6 rounded shadow">
-                    <div class="result-title"><a href="<?php echo $item['link']; ?>" target="_blank"><?php echo $item['title']; ?></a></div>
-                    <div class="result-url"><?php echo $item['link']; ?></div>
-                    <div class="result-description"><?php echo $item['snippet']; ?></div>
+                    <div class="result-title"><a href="<?php echo $row['url']; ?>" target="_blank"><?php echo $row['title']; ?></a></div>
+                    <div class="result-url"><?php echo $row['url']; ?></div>
+                    <div class="result-description"><?php echo $row['description']; ?></div>
                 </div>
-            <?php endforeach; ?>
+            <?php endwhile; ?>
         </div>
         <div class="pagination">
-            <?php if ($page > 1): ?>
-                <a href="search.php?query=<?php echo urlencode($query); ?>&page=<?php echo $page - 1; ?>">Previous</a>
-            <?php endif; ?>
-            <?php if ($page < $totalPages): ?>
-                <a href="search.php?query=<?php echo urlencode($query); ?>&page=<?php echo $page + 1; ?>">Next</a>
+            <?php if ($totalResults > 0): ?>
+                <?php if ($page > 1): ?>
+                    <a href="search.php?query=<?php echo urlencode($query); ?>&page=<?php echo $page - 1; ?>">Previous</a>
+                <?php endif; ?>
+                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                    <a href="search.php?query=<?php echo urlencode($query); ?>&page=<?php echo $i; ?>" <?php if ($i === $page) echo 'class="active"'; ?>><?php echo $i; ?></a>
+                <?php endfor; ?>
+                <?php if ($page < $totalPages): ?>
+                    <a href="search.php?query=<?php echo urlencode($query); ?>&page=<?php echo $page + 1; ?>">Next</a>
+                <?php endif; ?>
             <?php endif; ?>
         </div>
     </div>
