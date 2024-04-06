@@ -1,7 +1,0 @@
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}\.php -f
-RewriteRule ^(.*)$ $1.php [NC,L]
-RewriteRule ^movies\?id=([0-9]+)/([^/]+)$ movies.php?id=$1 [L]
-ErrorDocument 403 /404
-ErrorDocument 404 /404
