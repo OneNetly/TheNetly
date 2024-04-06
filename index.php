@@ -1,34 +1,33 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>TechSpecs Products</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mx-auto mt-8">
-        <h1 class="text-3xl font-bold mb-4">TechSpecs Products</h1>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <?php
-            require_once 'database.php';
+<?php include_once 'header.php';?>
+<h2 class="text-xs text-indigo-500 tracking-widest font-medium title-font mb-5 mt-5 text-center">NOW PLAYING</h2>
+<center><div class="container mx-auto"><span class="inline-grid grid-cols-4 sm:grid-cols-4 xl:grid-cols-10 gap-3">
+		<?php
+			$json_data = file_get_contents("https://api.themoviedb.org/3/movie/now_playing?api_key=63fb1e91fb11068f4a55b0a6df305231");
+			$json = json_decode($json_data, true);
+			if(count($json) != 0){
+				foreach($json['results'] as $result){
+					?>
+					<span><a href= "/movies?id=<?php echo $result['id']; ?>"><img class="w-40" src="https://image.tmdb.org/t/p/w185<?php echo $result['poster_path']; ?>" alt="Image"></a></span>
+					<?php
+				}
+			}
+		?>
+		</span></div></center>
 
-            $sql = "SELECT * FROM products";
-            $result = $conn->query($sql);
+      <h2 class="text-xs text-indigo-500 tracking-widest font-medium title-font mb-5 mt-5 text-center">TV SERIES</h2>
 
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    echo '<div class="bg-white rounded-lg shadow-md p-4">';
-                    echo '<h2 class="text-xl font-bold mb-2">' . $row['name'] . '</h2>';
-                    echo '<p class="text-gray-600 mb-4">' . $row['description'] . '</p>';
-                    echo '<p class="text-lg font-bold">Price: $' . $row['price'] . '</p>';
-                    echo '</div>';
-                }
-            } else {
-                echo '<p>No products found.</p>';
-            }
 
-            $conn->close();
-            ?>
-        </div>
-    </div>
-</body>
-</html>
+	  <center><div class="container mx-auto"><span class="inline-grid grid-cols-4 sm:grid-cols-4 xl:grid-cols-10 gap-3">
+		<?php
+			$json_data = file_get_contents("https://api.themoviedb.org/3/tv/top_rated?api_key=63fb1e91fb11068f4a55b0a6df305231");
+			$json = json_decode($json_data, true);
+			if(count($json) != 0){
+				foreach($json['results'] as $result){
+					?>
+					<span><a href= "/tv?id=<?php echo $result['id']; ?>&s=1&e=1"><img class="w-40" src="https://image.tmdb.org/t/p/w185<?php echo $result['poster_path']; ?>" alt="Image"></a></span>
+					<?php
+				}
+			}
+		?>
+		</span></div></center>
+		<?php include_once 'footer.php';?>
