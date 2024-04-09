@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TheNetly Base64 Encoder - Encode Text, Images to Base64</title>
+  <meta name="description" content="TheNetly Base64 Encoder is a free online tool that allows you to encode text to Base64 format, as well as decode Base64 strings back to their original form. Easily convert and share data with our user-friendly interface.">
+  <meta name="keywords" content="TheNetly base64 encoder, base64 decoder, encode text to base64, encode image to base64, decode base64 to text, decode base64 to image, online base64 tool">
+  <link href="./css/output.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <link rel="shortcut icon" href="./icon.png" type="image/x-icon">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Base64 Encoder - Encode Text, Images to Base64">
+  <meta name="twitter:description" content="Base64 Encoder is a free online tool that allows you to encode text to Base64 format, as well as decode Base64 strings back to their original form. Easily convert and share data with our user-friendly interface.">
+  <meta name="twitter:image" content="https://www.base64-encoder.com/icon.png">
+  <!-- Facebook Card -->
+  <meta property="og:title" content="Base64 Encoder - Encode Text, Images to Base64">
+  <meta property="og:description" content="Base64 Encoder is a free online tool that allows you to encode text to Base64 format, as well as decode Base64 strings back to their original form. Easily convert and share data with our user-friendly interface.">
+  <meta property="og:image" content="https://www.base64-encoder.com/icon.png">
+  <meta property="og:url" content="https://www.base64-encoder.com">
+  <meta property="og:type" content="website">
+  
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9354746037074515" crossorigin="anonymous"></script>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "TheNetly Base64 Encoder",
+      "description": "TheNetly Base64 Encoder is a free online tool that allows you to encode and decode data using the Base64 encoding scheme. Easily convert text, images to Base64.",
+      "url": "https://www.thenetly.com",
+      "image": "https://www.thenetly.com/icon.png",
+      "applicationCategory": "Utility",
+      "operatingSystem": "Web"
+    }
+  </script>
+</head>
+<body>
+  <nav class="bg-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex-shrink-0">
+          <a href="/" class="text-white text-xl font-bold">TheNetly Base64 Encoder</a>
+        </div>
+        <div class="hidden md:block">
+          <div class="ml-4 flex items-baseline space-x-4">
+            <a href="/policy.html" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Privacy Policy</a>
+          </div>
+        </div>
+        <div class="flex md:hidden">
+          <button type="button" class="text-gray-500 hover:text-white focus:outline-none focus:text-white" aria-label="Toggle menu" id="toggle-menu">
+            <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="md:hidden" id="mobile-menu" style="display: none;">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <a href="/policy.html" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Privacy Policy</a>
+      </div>
+    </div>
+  </nav>
+
+  <div id="app" class="max-w-7xl mx-auto p-8">
+    <h1 class="text-4xl font-bold mb-6 text-center">Base64 Encoder</h1>
+    
+    <div class="mb-6 flex justify-center">
+        <button @click="setMode('text')" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-4">
+          Text to Base64
+        </button>
+        <button @click="setMode('image')" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-4">
+          Image to Base64
+        </button>
+        <button @click="setMode('decode')" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+          Decode Base64
+        </button>
+      </div>
+  
+      <div class="mb-6" v-if="mode === 'text'">
+        <label for="textInput" class="block mb-2 font-bold text-lg">Text Input:</label>
+        <textarea
+          id="textInput"
+          v-model="textInput"
+          rows="5"
+          class="w-full p-3 border border-gray-300 rounded text-lg"
+          placeholder="Enter text to encode..."
+        ></textarea>
+      </div>
+  
+      <div class="mb-6" v-if="mode === 'image'">
+        <label for="imageInput" class="block mb-2 font-bold text-lg">Image Input:</label>
+        <div class="flex items-center">
+          <label class="w-64 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer">
+            <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+              <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
+            </svg>
+            <span class="mt-2 text-base leading-normal">Select an image</span>
+            <input id="imageInput" type="file" accept="image/*" @change="encodeImage" class="hidden">
+          </label>
+        </div>
+        <div v-if="imageUrl" class="mt-4">
+          <img :src="imageUrl" alt="Selected Image" class="max-w-full h-auto rounded">
+        </div>
+      </div>
+  
+      <div class="mb-6" v-if="mode === 'decode'">
+        <label for="decodeInput" class="block mb-2 font-bold text-lg">Base64 Input:</label>
+        <textarea
+          id="decodeInput"
+          v-model="decodeInput"
+          rows="5"
+          class="w-full p-3 border border-gray-300 rounded text-lg"
+          placeholder="Enter Base64 string to decode..."
+        ></textarea>
+      </div>
+  
+      <div class="mb-6">
+        <label for="output" class="block mb-2 font-bold text-lg">Output:</label>
+        <textarea
+          id="output"
+          v-model="output"
+          rows="5"
+          class="w-full p-3 border border-gray-300 rounded text-lg"
+          readonly
+        ></textarea>
+      </div>
+  
+      <button
+        @click="copyOutput"
+        class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded text-lg transition duration-300"
+      >
+        {{ copyButtonText }}
+      </button>
+
+    <div class="mb-8 mt-8">
+        <h2 class="text-2xl font-bold mb-4">What is Base64 Encoding?</h2>
+        <p class="text-lg mb-4">
+          Base64 encoding is a process of converting binary data into a text format. It is commonly used in various scenarios, such as embedding binary data within HTML or XML documents, transmitting data over networks, or representing complex data in a simple string format.
+        </p>
+        <p class="text-lg mb-4">
+          The Base64 encoding algorithm takes the binary data and converts it into a sequence of characters from a set of 64 predefined characters. The character set includes uppercase letters (A-Z), lowercase letters (a-z), digits (0-9), and two additional characters (usually '+' and '/'). The equal sign ('=') is used for padding at the end of the encoded string to ensure a multiple of four characters.
+        </p>
+        <h3 class="text-xl font-bold mb-2">Why Use Base64 Encoding?</h3>
+        <p class="text-lg mb-4">
+          Base64 encoding is widely used for several reasons:
+        </p>
+        <ul class="list-disc list-inside mb-4">
+          <li>It allows binary data to be represented as printable ASCII characters.</li>
+          <li>It ensures data integrity during transmission over networks that may not support all data types.</li>
+          <li>It helps to avoid issues with character encoding and special characters in different systems.</li>
+          <li>It is a widely supported and standardized encoding scheme.</li>
+        </ul>
+        <h4 class="text-lg font-bold mb-2">Base64 Encoding Process</h4>
+        <p class="text-lg mb-4">
+          The Base64 encoding process involves the following steps:
+        </p>
+        <ol class="list-decimal list-inside mb-4">
+          <li>Convert the binary data into a sequence of bytes.</li>
+          <li>Divide the bytes into groups of three (3 bytes = 24 bits).</li>
+          <li>Convert each group of three bytes into four Base64 characters.</li>
+          <li>Pad the encoded string with '=' characters if necessary to make the length a multiple of four.</li>
+        </ol>
+        <h5 class="text-lg font-bold mb-2">Base64 Decoding</h5>
+        <p class="text-lg mb-4">
+          Base64 decoding is the reverse process of encoding. It takes the Base64-encoded string and converts it back into the original binary data. The decoding process removes any padding characters and reverses the mapping of Base64 characters to the original byte values.
+        </p>
+
+        <h3 class="text-xl font-bold mb-2">Using Base64-Encoded Images</h3>
+        <p class="text-lg mb-4">
+        When you encode an image using the Base64 Encoder tool, you can use the resulting Base64-encoded string to embed the image directly into HTML, CSS, or other code. Here's how you can use the Base64-encoded image:
+    </p>
+    <ol class="list-decimal list-inside mb-4">
+        <li>Copy the Base64-encoded string from the output textarea.</li>
+        <li>In your HTML code, use the Base64-encoded string as the source (src) of an image element.</li>
+        <li>Prefix the Base64-encoded string with the appropriate data URI scheme for the image format (e.g., "data:image/png;base64," for PNG images).</li>
+      </ol>
+      <p class="text-lg mb-4">
+        Example HTML code:
+      </p>
+      <pre class="bg-gray-100 p-4 rounded mb-4"> &lt;img src="data:image/png;base64,{base64_encoded_string}" alt="Base64 Encoded Image"&gt; </pre>
+      <p class="text-lg">
+        Replace "{base64_encoded_string}" with the actual Base64-encoded string obtained from the tool. This way, you can embed the image directly into your HTML code without the need for a separate image file.
+      </p>
+      </div>
+  </div>
+
+  <div class="bg-white pt-4 sm:pt-10 lg:pt-12">
+    <footer class="mx-auto max-w-7xl px-4 md:px-8">
+      <div class="py-8 text-center text-sm">© 2024 - Base64 Encoder | All rights reserved.</div>
+    </footer>
+  </div>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        mode: 'text',
+        textInput: '',
+        decodeInput: '',
+        copyButtonText: 'Copy',
+        imageUrl: '',
+        output: '',
+      },
+      watch: {
+        textInput() {
+          if (this.mode === 'text') {
+            this.output = btoa(this.textInput);
+          }
+        },
+        decodeInput() {
+          if (this.mode === 'decode') {
+            try {
+              this.output = atob(this.decodeInput);
+            } catch (error) {
+              this.output = 'Invalid Base64 string';
+            }
+          }
+        },
+      },
+      methods: {
+        setMode(mode) {
+          this.mode = mode;
+          this.textInput = '';
+          this.decodeInput = '';
+          this.imageUrl = '';
+          this.output = '';
+        },
+        encodeImage(event) {
+          const file = event.target.files[0];
+          const reader = new FileReader();
+          reader.onload = () => {
+            this.imageUrl = reader.result;
+            this.output = reader.result.split(',')[1];
+          };
+          reader.readAsDataURL(file);
+        },
+        copyOutput() {
+          navigator.clipboard.writeText(this.output);
+          this.copyButtonText = 'Copied!';
+          setTimeout(() => {
+            this.copyButtonText = 'Copy';
+          }, 1000);
+        },
+      },
+    });
+  </script>
+  <script>
+    const toggleMenuButton = document.getElementById('toggle-menu');
+    const mobileMenu = document.getElementById('mobile-menu');
+  
+    toggleMenuButton.addEventListener('click', () => {
+      mobileMenu.style.display = mobileMenu.style.display === 'none' ? 'block' : 'none';
+    });
+  </script>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RLJ7GZ2LCT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-RLJ7GZ2LCT');
+</script>
+</body>
+</html>
